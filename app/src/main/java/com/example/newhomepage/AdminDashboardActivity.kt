@@ -37,9 +37,18 @@ class AdminDashboardActivity : AppCompatActivity() {
         val manageEventsButton = findViewById<Button>(R.id.manageEventsButton)
         manageEventsButton.setOnClickListener {
             // เปิดหน้าจัดการกิจกรรมทั้งหมด
-            Toast.makeText(this, "กำลังพัฒนา...", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, ManageEventsActivity::class.java)
+            startActivity(intent)
         }
 
-        // โค้ดเพิ่มเติมสำหรับฟังก์ชันอื่นๆ ของแอดมิน
+        // เพิ่มปุ่มออกจากระบบ
+        val logoutButton = findViewById<Button>(R.id.logoutButton)
+        logoutButton.setOnClickListener {
+            sessionManager.logout()
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
     }
 }
