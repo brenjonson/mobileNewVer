@@ -1,6 +1,9 @@
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import java.util.concurrent.TimeUnit
 
 class LocationImagesAdapter(private val images: List<Int>) : RecyclerView.Adapter<LocationImagesAdapter.LocationImageViewHolder>() {
 
@@ -11,6 +14,15 @@ class LocationImagesAdapter(private val images: List<Int>) : RecyclerView.Adapte
         imageView.scaleType = ImageView.ScaleType.CENTER_CROP
         return LocationImageViewHolder(imageView)
     }
+
+    private val okHttpClient = OkHttpClient.Builder()
+        .addInterceptor(HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY  // แสดงรายละเอียดทั้งหมด
+        })
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .build()
 
     // เชื่อมโยงข้อมูลกับ ViewHolder
     override fun onBindViewHolder(holder: LocationImageViewHolder, position: Int) {

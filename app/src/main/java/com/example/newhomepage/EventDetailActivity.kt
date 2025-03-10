@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.example.newhomepage.repositories.RegistrationRepository
 import com.example.newhomepage.utils.SessionManager
 import com.google.android.material.tabs.TabLayout
@@ -36,6 +37,9 @@ class EventDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_detail)
 
+
+
+
         // เริ่มต้นตัวแปร repository และ session manager
         registrationRepository = RegistrationRepository()
         sessionManager = SessionManager(this)
@@ -56,6 +60,21 @@ class EventDetailActivity : AppCompatActivity() {
         val eventNameTextView: TextView = findViewById(R.id.eventNameTextView)
         val eventDateTextView: TextView = findViewById(R.id.eventDateTextView)
         val eventImageView: ImageView = findViewById(R.id.eventImageView)
+        val eventImageUrl = intent.getStringExtra("eventImageUrl")
+
+        if (eventImageUrl != null && eventImageUrl.isNotEmpty()) {
+            val baseUrl = "http://10.0.2.2:3000" // หรือใช้ URL ของเซิร์ฟเวอร์ของคุณ
+            val fullImageUrl = baseUrl + eventImageUrl
+
+            Glide.with(this)
+                .load(fullImageUrl)
+                .placeholder(R.drawable.event1) // รูปพื้นฐานระหว่างโหลด
+                .error(intent.getIntExtra("eventImageResId", R.drawable.event1)) // ถ้าโหลดไม่สำเร็จ
+                .into(eventImageView)
+        } else {
+            // ถ้าไม่มี URL รูปภาพ ให้ใช้รูปจากทรัพยากร
+            eventImageView.setImageResource(intent.getIntExtra("eventImageResId", R.drawable.event1))
+        }
 
         eventNameTextView.text = eventName ?: "กิจกรรมไม่ระบุ"
         eventDateTextView.text = eventDate ?: "วันที่ไม่ระบุ"

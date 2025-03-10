@@ -5,27 +5,30 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class EventModel(
-    val id: Int, // เพิ่มฟิลด์ id
+    val id: Int,
     val eventName: String,
     val eventDate: String,
     val imageResId: Int,
-    val category: String
+    val category: String,
+    val imageUrl: String? = null // เพิ่มฟิลด์นี้
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
-        parcel.readInt(), // อ่าน id
+        parcel.readInt(),
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readInt(),
-        parcel.readString() ?: ""
+        parcel.readString() ?: "",
+        parcel.readString() // อ่านค่า imageUrl
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(id) // เขียน id
+        parcel.writeInt(id)
         parcel.writeString(eventName)
         parcel.writeString(eventDate)
         parcel.writeInt(imageResId)
         parcel.writeString(category)
+        parcel.writeString(imageUrl) // เขียนค่า imageUrl
     }
 
     override fun describeContents(): Int {

@@ -2,6 +2,7 @@
 package com.example.newhomepage.api
 
 import com.example.newhomepage.api.models.*
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -36,7 +37,7 @@ interface ApiService {
 
     @POST("api/events")
     suspend fun createEvent(
-        @Body eventData: Map<String, Any>,
+        @Body eventData: EventRequest,
         @Header("Authorization") token: String
     ): Response<ApiResponse<Int>>
 
@@ -54,10 +55,10 @@ interface ApiService {
     ): Response<ApiResponse<Boolean>>
 
     @Multipart
-    @POST("api/events/{id}/image")
+    @POST("api/events/{id}/image")  // ตรวจสอบว่า URL นี้ถูกต้อง
     suspend fun uploadEventImage(
         @Path("id") eventId: Int,
-        @Part image: Any, // ควรเป็น MultipartBody.Part ในการใช้งานจริง
+        @Part image: MultipartBody.Part,
         @Header("Authorization") token: String
     ): Response<ApiResponse<String>>
 

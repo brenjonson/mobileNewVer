@@ -119,8 +119,9 @@ class MainActivity : AppCompatActivity() {
                             id = event.id,
                             eventName = event.title,
                             eventDate = formatDate(event.event_date),
-                            imageResId = getImageResourceForEvent(event), // ฟังก์ชันช่วยเลือกรูปภาพตามหมวดหมู่
-                            category = event.category
+                            imageResId = getImageResourceForEvent(event), // รูปเริ่มต้น
+                            category = event.category,
+                            imageUrl = event.image_url // เพิ่มการแมพฟิลด์นี้
                         )
                     }
 

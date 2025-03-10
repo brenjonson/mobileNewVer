@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 class EventAdapter(private var eventList: MutableList<EventModel>, private val onClick: (EventModel) -> Unit) :
     RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
@@ -40,7 +41,22 @@ class EventAdapter(private var eventList: MutableList<EventModel>, private val o
         fun bind(event: EventModel, onClick: (EventModel) -> Unit) {
             eventName.text = event.eventName
             eventDate.text = event.eventDate
-            eventImage.setImageResource(event.imageResId)
+
+            // แก้ไขส่วนการแสดงรูปภาพ
+            if (event.imageUrl != null && event.imageUrl.isNotEmpty()) {
+                // ใช้ BASE_URL จากคลาส RetrofitClient
+                val baseUrl = "http://10.0.2.2:3000" // หรือใช้ URL ของเซิร์ฟเวอร์ของคุณ
+                val imageUrl = baseUrl + event.imageUrl
+
+                Glide.with(itemView.context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.image1) // รูปพื้นฐานระหว่างโหลด
+                    .error(event.imageResId) // ถ้าโหลดไม่สำเร็จให้ใช้รูปเดิม
+                    .into(eventImage)
+            } else {
+                // ถ้าไม่มี URL รูปภาพ ให้ใช้รูปจากทรัพยากร
+                eventImage.setImageResource(event.imageResId)
+            }
 
             itemView.setOnClickListener {
                 onClick(event)
